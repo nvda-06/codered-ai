@@ -166,23 +166,11 @@ document.getElementById("app").innerHTML=`
 
 <h1>Ready For Analysis</h1>
 
-<h2>
+<h2>Collected Inputs</h2>
 
-Collected Inputs
+<pre>${JSON.stringify(panicData, null, 2)}</pre>
 
-</h2>
-
-<pre>
-
-${JSON.stringify(
-panicData,
-null,
-2
-)}
-
-</pre>
-
-<button>
+<button onclick="analyzeThreat()">
 
 Analyze Threat
 
@@ -191,5 +179,55 @@ Analyze Threat
 `;
 
 console.log(panicData);
+
+}
+
+async function analyzeThreat(){
+
+document.getElementById("app").innerHTML=`<h1>Analyzing... Please wait</h1>`;
+
+try {
+
+const response = await fetch("http://localhost:8000/triage", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(panicData)
+});
+
+const result = await response.json();
+
+document.getElementById("app").innerHTML=`
+
+<h1>Threat Level: ${result.threat_level}</h1>
+
+<p>${result.ai_calm_message}</p>
+
+<h2>Action Steps</h2>
+
+<ol>
+  ${result.action_steps.map(step => `<li>${step}</li>`).join("")}
+</ol>
+
+<button onclick="location.reload()">Start Over</button>
+
+`;
+
+} catch(err) {
+
+document.getElementById("app").innerHTML=`
+
+<h1>Error</h1>
+
+<p>Could not connect to backend. Make sure the server is running.</p>
+
+<button onclick="location.reload()">Try Again</button>
+
+`;
+
+console.error(err);
+
+}
 
 }
