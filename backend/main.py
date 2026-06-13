@@ -63,3 +63,40 @@ def process_triage(data: TriageData):
         "ai_calm_message": calm_message,
         "action_steps": clean_steps
     }
+
+
+# AUTOMATED PLAYBOOK GENERATION 
+
+class PlaybookRequest(BaseModel):
+    incident_category: str
+    os_type: str 
+
+@app.post("/playbook")
+def generate_playbook(data: PlaybookRequest):
+    
+    # The Prompt Engineering for the Playbook Generation
+    ai_prompt = f"""
+    You are an elite level 3 Incident Response engineer.
+    The user is currently experiencing a '{data.incident_category}' cyber attack.
+    Their affected system is running: {data.os_type}.
+    
+    Write a highly secure, executable mitigation script to isolate the machine and stop the attack.
+    If Windows, write PowerShell. If Linux, write Bash.
+    
+    CRITICAL INSTRUCTION: Return ONLY the raw script code. Do NOT use markdown code blocks (```). Do not include any explanations, warnings, or human text. Just the raw, executable text.
+    """
+    
+    # Deploying the Heavy Model
+    response = client.models.generate_content(
+        model='gemini-2.5-flash',
+        contents=ai_prompt
+    )
+    
+    # Clean the response to ensure it's pure code
+    raw_script = response.text.strip()
+
+    return {
+        "status": "success",
+        "action": f"Generated {data.os_type} mitigation script",
+        "script_content": raw_script
+    }
