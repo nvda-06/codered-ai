@@ -1,20 +1,15 @@
-let panicData={
-
-incident_category:"",
-
-is_attacker_active:false,
-
-has_financial_info:false,
-
-time_since_breach:"",
-
-user_panic_level:0
-
+let panicData = {
+incident_category: "",
+is_attacker_active: false,
+has_financial_info: false,
+time_since_breach: "",
+user_panic_level: 0
 };
 
+// START
 document
 .getElementById("panicBtn")
-.onclick=start;
+.onclick = start;
 
 function start(){
 
@@ -23,51 +18,43 @@ document.getElementById("app").innerHTML=`
 <h1>Select Incident</h1>
 
 <button onclick="incident('otp_shared')">
-
 OTP Shared
-
 </button>
 
 <button onclick="incident('account_hacked')">
-
 Account Hacked
-
 </button>
 
 <button onclick="incident('suspicious_link')">
-
 Suspicious Link
-
 </button>
 
 `;
 
 }
 
-function incident(value){
+// INCIDENT
+function incident(type){
 
-panicData.incident_category=value;
+panicData.incident_category=type;
 
 document.getElementById("app").innerHTML=`
 
 <h1>Is attacker still active?</h1>
 
 <button onclick="saveActive(true)">
-
 YES
-
 </button>
 
 <button onclick="saveActive(false)">
-
 NO
-
 </button>
 
 `;
 
 }
 
+// ACTIVE
 function saveActive(value){
 
 panicData.is_attacker_active=value;
@@ -77,21 +64,18 @@ document.getElementById("app").innerHTML=`
 <h1>Financial Info Exposed?</h1>
 
 <button onclick="saveFinancial(true)">
-
 YES
-
 </button>
 
 <button onclick="saveFinancial(false)">
-
 NO
-
 </button>
 
 `;
 
 }
 
+// FINANCIAL
 function saveFinancial(value){
 
 panicData.has_financial_info=value;
@@ -108,7 +92,7 @@ document.getElementById("app").innerHTML=`
 
 <button onclick="saveTime('less_than_1h')">
 
-< 1 hr
+< 1 hour
 
 </button>
 
@@ -128,6 +112,7 @@ Today
 
 }
 
+// TIME
 function saveTime(value){
 
 panicData.time_since_breach=value;
@@ -137,97 +122,248 @@ document.getElementById("app").innerHTML=`
 <h1>Panic Level</h1>
 
 <button onclick="savePanic(3)">
-
 LOW
-
 </button>
 
 <button onclick="savePanic(6)">
-
 MEDIUM
-
 </button>
 
 <button onclick="savePanic(9)">
-
 HIGH
-
 </button>
 
 `;
 
 }
 
+// TRIAGE
 function savePanic(value){
 
 panicData.user_panic_level=value;
 
 document.getElementById("app").innerHTML=`
 
-<h1>Ready For Analysis</h1>
+<div class="loading">
 
-<h2>Collected Inputs</h2>
+<div class="spinner"></div>
 
-<pre>${JSON.stringify(panicData, null, 2)}</pre>
+<div class="loading-text">
 
-<button onclick="analyzeThreat()">
+Analyzing Threat...
 
-Analyze Threat
+</div>
+
+<div class="loading-sub">
+
+Consulting AI defense engine
+
+</div>
+
+</div>
+
+`;
+
+fetch(
+"http://127.0.0.1:8000/triage",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(
+panicData
+)
+
+}
+
+)
+
+.then(response=>response.json())
+
+.then(data=>{
+
+document.getElementById("app").innerHTML=`
+
+<h1>
+
+Threat Level:
+${data.threat_level}
+
+</h1>
+
+<h2>
+
+${data.ai_calm_message}
+
+</h2>
+
+<h2>
+
+Recovery Steps
+
+</h2>
+
+<div>
+
+${[...new Set(data.action_steps)]
+
+.map(
+step=>
+
+`<div class="step">
+
+✓ ${step}
+
+</div>`
+
+)
+
+.join("")}
+
+</div>
+
+<br>
+
+<button onclick="generatePlaybook()">
+
+Generate Recovery Playbook
 
 </button>
 
 `;
 
-console.log(panicData);
+})
 
-}
+.catch(()=>{
 
-async function analyzeThreat(){
+document.getElementById("app").innerHTML=`
 
-document.getElementById("app").innerHTML=`<h1>Analyzing... Please wait</h1>`;
+<h1>
 
-try {
+Connection Failed
 
-const response = await fetch("http://localhost:8000/triage", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(panicData)
+</h1>
+
+`;
+
 });
 
-const result = await response.json();
+}
+
+// PLAYBOOK
+function generatePlaybook(){
 
 document.getElementById("app").innerHTML=`
 
-<h1>Threat Level: ${result.threat_level}</h1>
+<h1>
 
-<p>${result.ai_calm_message}</p>
+Select Operating System
 
-<h2>Action Steps</h2>
+</h1>
 
-<ol>
-  ${result.action_steps.map(step => `<li>${step}</li>`).join("")}
-</ol>
+<button onclick="requestPlaybook('Windows')">
 
-<button onclick="location.reload()">Start Over</button>
+Windows
 
-`;
+</button>
 
-} catch(err) {
+<button onclick="requestPlaybook('Linux')">
 
-document.getElementById("app").innerHTML=`
+Linux
 
-<h1>Error</h1>
-
-<p>Could not connect to backend. Make sure the server is running.</p>
-
-<button onclick="location.reload()">Try Again</button>
+</button>
 
 `;
-
-console.error(err);
 
 }
+
+// PLAYBOOK REQUEST
+function requestPlaybook(os){
+
+document.getElementById("app").innerHTML=`
+
+<div class="loading">
+
+<div class="spinner"></div>
+
+<div class="loading-text">
+
+Generating Playbook...
+
+</div>
+
+<div class="loading-sub">
+
+Building ${os} mitigation script
+
+</div>
+
+</div>
+
+`;
+
+fetch(
+"http://127.0.0.1:8000/playbook",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+incident_category:
+panicData.incident_category,
+
+os_type:
+os
+
+})
+
+}
+
+)
+
+.then(response=>response.json())
+
+.then(data=>{
+
+document.getElementById("app").innerHTML=`
+
+<h1>
+
+Recovery Playbook
+
+</h1>
+
+<pre>
+
+${data.script_content}
+
+</pre>
+
+`;
+
+})
+
+.catch(()=>{
+
+document.getElementById("app").innerHTML=`
+
+<h1>
+
+Playbook Failed
+
+</h1>
+
+`;
+
+});
 
 }
