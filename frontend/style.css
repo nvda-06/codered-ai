@@ -1,23 +1,136 @@
 body{
-background:black;
+
+margin:0;
+
+background:
+linear-gradient(
+135deg,
+#050505,
+#111111
+);
+
 color:white;
 
-display:flex;
+font-family:
+Segoe UI;
 
 height:100vh;
 
-justify-content:center;
+display:grid;
 
-align-items:center;
+place-items:center;
 
-flex-direction:column;
+overflow:hidden;
+
+}
+
+#app{
+
+text-align:center;
+
+width:80%;
+
+max-width:900px;
+
+}
+
+h1{
+
+font-size:64px;
+
+color:#ff4444;
+
+margin-bottom:20px;
+
+text-shadow:
+0 0 20px red;
+
+}
+
+h2{
+
+color:#ff8888;
+
 }
 
 button{
 
+display:block;
+
+margin:20px auto;
+
+padding:18px 40px;
+
+width:300px;
+
+font-size:20px;
+
+border:none;
+
+border-radius:18px;
+
+background:
+linear-gradient(
+90deg,
+#ff2e63,
+#ff4444
+);
+
+color:white;
+
+cursor:pointer;
+
+transition:
+0.3s;
+
+}
+
+button:hover{
+
+transform:
+scale(1.05);
+
+box-shadow:
+0 0 30px red;
+
+}
+
+div{
+
+font-size:22px;
+
+margin:15px;
+
+}
+
+pre{
+
+background:
+rgba(
+255,
+255,
+255,
+0.06
+);
+
 padding:20px;
 
-font-size:24px;
+border-radius:15px;
 
-border-radius:20px;
+text-align:left;
+
+overflow:auto;
+
+max-width:700px;
+
+margin:auto;
+
+}
+
+p{
+
+color:#bbbbbb;
+
+font-size:18px;
+
 }
