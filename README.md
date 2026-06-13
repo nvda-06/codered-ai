@@ -16,7 +16,9 @@ Interactive cyber first-aid system.
 - PDF report
 
 ## Team
-(Add names)
+Abhigyaa Dwivedi
+Niveditha Ragesh
+Ridhima Thapa
 
 ## Domain
 CyberTech
