@@ -1,57 +1,69 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
+
 body{
 
-margin:0;
-
-background:
-linear-gradient(
-135deg,
-#050505,
-#111111
-);
+background:black;
 
 color:white;
 
-font-family:
-Segoe UI;
+min-height:100vh;
 
-height:100vh;
+display:flex;
 
-display:grid;
+justify-content:center;
 
-place-items:center;
+align-items:center;
 
-overflow:hidden;
+padding:40px;
 
 }
+
+
 
 #app{
 
+width:100%;
+
+max-width:1200px;
+
 text-align:center;
 
-width:80%;
-
-max-width:900px;
-
 }
+
+
 
 h1{
 
-font-size:64px;
+color:#ff3b3b;
 
-color:#ff4444;
+font-size:80px;
 
-margin-bottom:20px;
+margin-bottom:40px;
 
 text-shadow:
-0 0 20px red;
+0 0 15px red,
+0 0 35px red;
 
 }
+
+
 
 h2{
 
-color:#ff8888;
+color:#ff8c8c;
+
+font-size:34px;
+
+margin-bottom:30px;
 
 }
+
+
 
 button{
 
@@ -61,76 +73,144 @@ margin:20px auto;
 
 padding:18px 40px;
 
-width:300px;
+font-size:24px;
 
-font-size:20px;
+font-weight:bold;
 
 border:none;
 
 border-radius:18px;
 
-background:
-linear-gradient(
-90deg,
-#ff2e63,
-#ff4444
-);
+background:#e5e5e5;
 
-color:white;
+color:black;
 
 cursor:pointer;
 
-transition:
-0.3s;
+transition:.3s;
 
 }
+
+
 
 button:hover{
 
-transform:
-scale(1.05);
+transform:scale(1.06);
+
+background:red;
+
+color:white;
 
 box-shadow:
-0 0 30px red;
+0 0 20px red,
+0 0 40px red;
 
 }
 
-div{
+
+
+.step{
+
+max-width:1200px;
+
+margin:15px auto;
+
+padding:18px;
 
 font-size:22px;
 
-margin:15px;
+line-height:1.5;
+
+background:#0d0d0d;
+
+border-left:8px solid red;
+
+border-radius:16px;
+
+box-shadow:
+0 0 18px rgba(255,0,0,.4);
+
+animation:fade .5s ease;
 
 }
+
+
 
 pre{
 
-background:
-rgba(
-255,
-255,
-255,
-0.06
-);
-
-padding:20px;
-
-border-radius:15px;
-
-text-align:left;
-
-overflow:auto;
-
-max-width:700px;
+max-width:1200px;
 
 margin:auto;
 
-}
+padding:30px;
 
-p{
+background:#101010;
 
-color:#bbbbbb;
+color:#00ff99;
+
+border-radius:20px;
+
+overflow:auto;
 
 font-size:18px;
+
+text-align:left;
+
+box-shadow:
+0 0 20px rgba(0,255,100,.2);
+
+}
+
+
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+
+transform:translateY(30px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+
+
+@media(max-width:768px){
+
+h1{
+
+font-size:52px;
+
+}
+
+h2{
+
+font-size:26px;
+
+}
+
+button{
+
+font-size:18px;
+
+padding:14px 24px;
+
+}
+
+.step{
+
+font-size:18px;
+
+}
 
 }
