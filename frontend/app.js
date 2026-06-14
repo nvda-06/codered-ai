@@ -128,44 +128,194 @@ function generatePlaybook(){
 
 // REQUEST PLAYBOOK
 function requestPlaybook(os){
-  document.getElementById("app").innerHTML = `
-    <div style="text-align: center;">
-      <h1 style="animation: pulse 1.5s infinite; color: red;">Generating Playbook...</h1>
-      <p style="color: yellow;">Writing custom ${os} mitigation script. Please wait.</p>
-    </div>
-  `;
 
-  fetch("http://127.0.0.1:8000/playbook", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      incident_category: panicData.incident_category,
-      os_type: os
-    })
-  })
-  .then(async response => {
-    if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(`Server Error ${response.status}: ${errText}`);
-    }
-    return response.json();
-  })
-  .then(data => {
-    document.getElementById("app").innerHTML = `
-      <h1>Recovery Playbook</h1>
-      <pre>${data.script_content}</pre>
-      <button onclick="location.reload()">Done</button>
-    `;
-  })
-  .catch(error => {
-    document.getElementById("app").innerHTML = `
-      <h1>Playbook Generation Failed</h1>
-      <p style="color: yellow; max-width: 800px; margin: 0 auto; line-height: 1.5;">${error.message}</p>
-      <br>
-      <button onclick="location.reload()">Start Over</button>
-    `;
-    console.error("Playbook Error:", error);
-  });
+document.getElementById("app").innerHTML = `
+
+<div style="text-align:center;">
+<h1 style="animation:pulse 1.5s infinite;color:red;">
+Generating Playbook...
+</h1>
+
+<p style="color:yellow;">
+Building custom ${os} mitigation instructions.
+Please wait.
+</p>
+</div>
+`;
+
+fetch("http://127.0.0.1:8000/playbook",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+incident_category:
+panicData.incident_category,
+
+os_type:
+os
+
+})
+
+})
+
+.then(async response=>{
+
+if(!response.ok){
+
+const errText =
+await response.text();
+
+throw new Error(
+`Server Error ${response.status}: ${errText}`
+);
+
+}
+
+return response.json();
+
+})
+
+.then(data=>{
+
+document.getElementById("app").innerHTML=`
+
+<h1>
+
+Recovery Playbook
+
+</h1>
+
+<div class="guide">
+
+<h2>
+
+⚠ Before Running
+
+</h2>
+
+<p>
+
+Stay calm.
+This script was generated to help secure your system.
+
+</p>
+
+<p>
+
+1. Copy the script below.
+
+</p>
+
+<p>
+
+2. Open:
+
+<br><br>
+
+Windows →
+PowerShell
+(Run as Administrator)
+
+<br>
+
+Linux →
+Terminal
+
+</p>
+
+<p>
+
+3. Paste and press Enter.
+
+</p>
+
+<p>
+
+4. Watch outputs carefully.
+
+</p>
+
+<p>
+
+5. If uncertain,
+   ask an experienced user before running.
+
+</p>
+
+</div>
+
+<pre id="playbookCode">
+
+${data.script_content}
+
+</pre>
+
+<button onclick="copyPlaybook()">
+
+Copy Script
+
+</button>
+
+<br><br>
+
+<button onclick="location.reload()">
+
+Done
+
+</button>
+
+`;
+
+window.currentScript =
+data.script_content;
+
+})
+
+.catch(error=>{
+
+document.getElementById("app").innerHTML=`
+
+<h1>
+
+Playbook Generation Failed
+
+</h1>
+
+<p style="color:yellow;">
+
+${error.message}
+
+</p>
+
+<br>
+
+<button onclick="location.reload()">
+
+Start Over
+
+</button>
+
+`;
+
+console.error(error);
+
+});
+
+}
+
+function copyPlaybook(){
+
+navigator.clipboard.writeText(
+window.currentScript
+);
+
+alert(
+"Script copied."
+);
+
 }

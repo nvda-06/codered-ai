@@ -297,3 +297,78 @@ opacity:1;
 }
 
 }
+.guide{
+
+max-width:1000px;
+
+margin:30px auto;
+
+padding:28px;
+
+background:#111111;
+
+border-left:8px solid red;
+
+border-radius:18px;
+
+text-align:left;
+
+box-shadow:
+0 0 18px rgba(255,0,0,.3);
+
+animation:fade .5s ease;
+
+}
+
+.guide h2{
+
+color:#ff6666;
+
+font-size:32px;
+
+margin-bottom:20px;
+
+}
+
+.guide p{
+
+font-size:20px;
+
+line-height:1.9;
+
+color:#dddddd;
+
+margin-bottom:18px;
+
+}
+
+#playbookCode{
+
+margin-top:25px;
+
+white-space:pre-wrap;
+
+word-break:break-word;
+
+line-height:1.7;
+
+}
+
+.copyButton{
+
+background:#00cc66;
+
+color:black;
+
+}
+
+.copyButton:hover{
+
+background:#00ff88;
+
+color:black;
+
+box-shadow:
+0 0 25px #00ff88;
+
+}
